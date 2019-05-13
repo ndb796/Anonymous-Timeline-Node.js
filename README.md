@@ -31,3 +31,7 @@ yarn add express mongoose body-parser
 }
 # Check the data in MongoDB
 ```
+* Add All Boards Read Module
+```
+# REST API Test (http://localhost:3000/api/board?name=gildong&content=안녕 : GET)
+```
