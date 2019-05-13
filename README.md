@@ -36,3 +36,17 @@ yarn add express mongoose body-parser
 # https://github.com/ndb796/Anonymous-Timeline-Node.js/commit/c1b7a212bb33800f066225d27ab37993e4abbe5f
 # REST API Test (http://localhost:3000/api/board?name=gildong&content=안녕 : GET)
 ```
+* Add Detail, Update, Delete Module
+```
+# https://github.com/ndb796/Anonymous-Timeline-Node.js/commit/391126b9642669c948f7cef2a073fd71d7c5c7a4
+# REST API Test (http://localhost:3000/api/board/1 : GET)
+# REST API Test (http://localhost:3000/api/board/1 : PUT)
+Header - password: 123123
+{
+  "name": "gildong",
+  "password": "456456",
+  "content": "반갑습니다."
+}
+# REST API Test (http://localhost:3000/api/board/1 : DELETE)
+Header - password: 456456
+```
