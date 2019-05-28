@@ -15,7 +15,7 @@ router.get('/',
         }
         Board.find(query)
         .select("-password")
-        .sort({id: 1})
+        .sort({id: -1})
         .exec(function(err, boards) {
             if(err) {
                 res.status(500);
