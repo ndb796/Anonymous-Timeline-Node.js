@@ -6,25 +6,67 @@ router.get('/',
     // 오름차순으로 ID 값을 검색합니다.
     function(req, res, next) {
         let query = {};
+        let searched = false;
         // 대소문자를 무시하고 검색 조건을 명시합니다.
         if(req.query.name) {
             query.name = {$regex:req.query.name, $options:'i'};
+            searched = true;
         }
         if(req.query.content) {
             query.content = {$regex:req.query.content, $options:'i'};
+            searched = true;
         }
-        Board.find(query)
-        .select("-password")
-        .sort({id: -1})
-        .exec(function(err, boards) {
-            if(err) {
-                res.status(500);
-                res.json({success: false, data: err});
+        // ID를 매개변수로 입력 받는 경우, 특정한 ID로부터 5개 이내의 데이터를 가져옵니다.
+        if(req.query.id) {
+            let id = req.query.id
+            query.id = {$gt: id - 5, $lte: id}
+            Board.find(query)
+            .select("-password")
+            .sort({id: -1})
+            .exec(function(err, boards) {
+                if(err) {
+                    res.status(500);
+                    res.json({success: false, data: err});
+                }
+                else {
+                    res.json({success: true, data: boards});
+                }
+            });
+        }
+        /* ID를 매개변수로 입력 받지 않은 경우, 최근 5개의 데이터를 불러옵니다.
+           이 때 검색어를 입력한 경우, 검색어에 맞는 모든 데이터를 다 불러옵니다.
+        */
+        else {
+            if(searched) {
+                Board.find(query)
+                .select("-password")
+                .sort({id: -1})
+                .exec(function(err, boards) {
+                    if(err) {
+                        res.status(500);
+                        res.json({success: false, data: err});
+                    }
+                    else {
+                        res.json({success: true, data: boards});
+                    }
+                });
+            } else {
+                Board.find(query)
+                .select("-password")
+                .sort({id: -1})
+                .limit(5)
+                .exec(function(err, boards) {
+                    if(err) {
+                        res.status(500);
+                        res.json({success: false, data: err});
+                    }
+                    else {
+                        res.json({success: true, data: boards});
+                    }
+                });
             }
-            else {
-                res.json({success: true, data: boards});
-            }
-        });
+        }
+
     }
 )
 
